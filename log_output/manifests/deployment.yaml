@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: prmckinney/k3d_log_output:1.3
+          image: prmckinney/k3d_log_output:1.7
