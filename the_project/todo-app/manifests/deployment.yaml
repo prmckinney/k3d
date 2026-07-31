@@ -15,3 +15,6 @@ spec:
       containers:
         - name: todo-app
           image: prmckinney/k3d_todo_app:1.4
+          env:
+            - name: PORT
+              value: 4000
