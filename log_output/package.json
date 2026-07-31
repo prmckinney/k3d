@@ -10,6 +10,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "koa": "^3.2.1",
     "uuid": "^14.0.1"
   }
 }
