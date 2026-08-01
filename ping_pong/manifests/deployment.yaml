@@ -12,6 +12,13 @@ spec:
       labels:
         app: ping-pong
     spec:
+      volumes:
+        - name: shared-log
+          persistentVolumeClaim:
+            claimName: log-claim
       containers:
         - name: ping-pong
-          image: prmckinney/k3d_ping_pong:1.9
+          image: prmckinney/k3d_ping_pong:1.11
+          volumeMounts:
+            - name: shared-log
+              mountPath: /usr/src/app/files

@@ -1,12 +1,15 @@
 import Koa from "koa";
 import fs from "fs";
+import path from "path";
 
 const app = new Koa();
 const PORT = process.env.PORT || 3000;
 
-const filePath = "/usr/src/app/files/uuid.txt";
+const directory = "/usr/src/app/files";
+const uuidFilePath = path.join(directory, "uuid.txt");
+const ppFilePath = path.join(directory, "pingpong.txt");
 
-const getFile = async () =>
+const getFile = async (filePath) =>
   new Promise((res) => {
     fs.readFile(filePath, (err, buffer) => {
       if (err)
@@ -16,10 +19,11 @@ const getFile = async () =>
   });
 
 app.use(async (ctx) => {
-  const uuid = await getFile();
-  ctx.body = `${uuid}`;
+  const uuid = await getFile(uuidFilePath);
+  const pingpong = await getFile(ppFilePath);
+  ctx.body = `${uuid}\nPing \/ Pongs: ${pingpong}`;
 
-  console.log(`${uuid}`);
+  console.log(`${uuid}\nPing \/ Pongs: ${pingpong}`);
 });
 
 console.log(`Started on port ${PORT}`);
