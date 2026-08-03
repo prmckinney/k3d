@@ -12,9 +12,16 @@ spec:
       labels:
         app: todo-app
     spec:
+      volumes:
+        - name: shared-todo
+          persistentVolumeClaim:
+            claimName: todo-claim
       containers:
         - name: todo-app
           image: prmckinney/k3d_todo_app:1.4
           env:
             - name: PORT
               value: "4000"
+          volumeMounts:
+            - name: shared-todo
+              mountPath: /usr/src/app/files
