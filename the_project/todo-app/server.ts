@@ -50,18 +50,36 @@ const refreshImage = async () => {
 const server = createServer(
   async (req: IncomingMessage, res: ServerResponse) => {
     if (req.url === "/") {
-      // Set the response headers
-      await refreshImage();
-      res.statusCode = 200;
-      res.write("<html>");
-      res.write("<h1>");
-      res.write("Todo App");
-      res.write("</h1>");
-      res.write('<img src="\image" align="middle">');
-      res.end("</html>");
+      // Read the local file asynchronously
+      fs.readFile("./index.html", "utf8", (err, data) => {
+        if (err) {
+          // Handle file missing or permission errors
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("500 Internal Server Error");
+          return;
+        }
+
+        // CRITICAL: Set the exact mime type for executable JavaScript
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end(data);
+      });
     } else if (req.url === "/image") {
       res.writeHead(200, { "Content-Type": "image/jpeg" });
       fs.createReadStream(filePath).pipe(res);
+    } else if (req.url === "/index.js") {
+      // Read the local file asynchronously
+      fs.readFile("./index.js", "utf8", (err, data) => {
+        if (err) {
+          // Handle file missing or permission errors
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("500 Internal Server Error");
+          return;
+        }
+
+        // CRITICAL: Set the exact mime type for executable JavaScript
+        res.writeHead(200, { "Content-Type": "application/javascript" });
+        res.end(data);
+      });
     }
   },
 );

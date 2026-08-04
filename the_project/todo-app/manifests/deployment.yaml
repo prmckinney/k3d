@@ -18,7 +18,7 @@ spec:
             claimName: todo-claim
       containers:
         - name: todo-app
-          image: prmckinney/k3d_todo_app:1.12
+          image: prmckinney/k3d_todo_app:1.13
           env:
             - name: PORT
               value: "4000"
