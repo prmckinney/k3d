@@ -1,13 +1,13 @@
 import Koa from "koa";
 import fs from "fs";
 import path from "path";
+import axios from "axios";
 
 const app = new Koa();
 const PORT = process.env.PORT || 3000;
 
 const directory = "/usr/src/app/files";
 const uuidFilePath = path.join(directory, "uuid.txt");
-const ppFilePath = path.join(directory, "pingpong.txt");
 
 const getFile = async (filePath) =>
   new Promise((res) => {
@@ -20,7 +20,8 @@ const getFile = async (filePath) =>
 
 app.use(async (ctx) => {
   const uuid = await getFile(uuidFilePath);
-  const pingpong = await getFile(ppFilePath);
+  const response = await axios.get("http://ping-pong-svc:1235/pings");
+  const pingpong = response.data;
   ctx.body = `${uuid}\nPing \/ Pongs: ${pingpong}`;
 
   console.log(`${uuid}\nPing \/ Pongs: ${pingpong}`);

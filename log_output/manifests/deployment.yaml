@@ -23,7 +23,7 @@ spec:
             - name: shared-log
               mountPath: /usr/src/app/files
         - name: log-output-read
-          image: prmckinney/k3d_log_output_read:1.11
+          image: prmckinney/k3d_log_output_read:2.1
           volumeMounts:
             - name: shared-log
               mountPath: /usr/src/app/files
