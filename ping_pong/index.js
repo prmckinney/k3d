@@ -1,11 +1,12 @@
 import Koa from "koa";
+import route from "koa-route";
 import fs from "fs";
 import path from "path";
 
 const app = new Koa();
 const PORT = process.env.PORT || 3000;
 
-const directory = "/usr/src/app/files";
+const directory = process.env.DIR || ".";
 const filePath = path.join(directory, "pingpong.txt");
 
 let value = 0;
@@ -27,7 +28,7 @@ const getFile = async () =>
     });
   });
 
-app.use(async (ctx) => {
+const pingpong = async (ctx) => {
   // Delete file if it already exists
   if (await fileAlreadyExists()) {
     value = parseInt(await getFile()) + 1;
@@ -40,7 +41,16 @@ app.use(async (ctx) => {
   );
 
   ctx.body = `pong ${value}`;
-});
+};
+
+const pings = async (ctx) => {
+  const pingpong = await getFile(filePath);
+  ctx.body = `${pingpong}`;
+};
+
+app.use(route.get("/", pingpong));
+app.use(route.get("/pingpong", pingpong));
+app.use(route.get("/pings", pings));
 
 console.log(`Listening on port ${PORT}`);
 app.listen(PORT);

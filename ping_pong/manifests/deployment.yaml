@@ -18,7 +18,10 @@ spec:
             claimName: log-claim
       containers:
         - name: ping-pong
-          image: prmckinney/k3d_ping_pong:1.11
+          image: prmckinney/k3d_ping_pong:2.1
+          env:
+            - name: DIR
+              value: "/usr/src/app/files"
           volumeMounts:
             - name: shared-log
               mountPath: /usr/src/app/files
