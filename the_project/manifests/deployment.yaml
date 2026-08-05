@@ -18,10 +18,15 @@ spec:
             claimName: todo-claim
       containers:
         - name: todo-app
-          image: prmckinney/k3d_todo_app:1.13
+          image: prmckinney/k3d_todo_app:2.2
           env:
             - name: PORT
               value: "4000"
+        - name: todo-backend
+          image: prmckinney/k3d_todo_backend:2.2
+          env:
+            - name: DIR
+              value: "/usr/src/app/files"
           volumeMounts:
             - name: shared-todo
               mountPath: /usr/src/app/files
