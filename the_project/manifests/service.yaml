@@ -10,4 +10,4 @@ spec:
     - name: http
       protocol: TCP
       port: 2345 # This is a port that is available to the cluster, in this case it can be ~ anything
-      targetPort: 4000 # This is the target port
+      targetPort: 8080 # This is the target port
