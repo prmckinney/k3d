@@ -1,9 +1,11 @@
 import Koa from "koa";
+import cors from "@koa/cors";
+import bodyParser from "koa-bodyparser";
 import route from "koa-route";
 import { pipeline } from "node:stream/promises";
 import path from "path";
 import fs from "fs";
-import { access, stat, mkdir, unlink } from "fs/promises";
+import { access, stat, mkdir, readFile, writeFile, unlink } from "fs/promises";
 import axios from "axios";
 
 const app = new Koa();
@@ -11,6 +13,7 @@ const PORT = process.env.PORT ?? "3000";
 
 const directory = process.env.DIR ?? path.join(".");
 const imagePath = path.join(directory, "image.jpg");
+const todoPath = path.join(directory, "todo.json");
 
 const fileExists = async (path: string) => {
   try {
@@ -59,7 +62,7 @@ const refreshImage = async () => {
   }
 };
 
-const serveImage = async (ctx) => {
+const serveImage = async (ctx: Koa.Context) => {
   await refreshImage();
 
   ctx.body = await getFile(imagePath);
@@ -68,7 +71,50 @@ const serveImage = async (ctx) => {
   ctx.status = 200;
 };
 
+const readTodo = async () => {
+  try {
+    const content = await readFile(todoPath, "utf-8");
+    const data: string[] = JSON.parse(content);
+    return data;
+  } catch (error) {
+    return [];
+  }
+};
+
+const writeTodo = async (data: string[]) => {
+  // Create directory if it doesn't exist
+  if (!(await fileExists(directory))) await mkdir(directory);
+
+  // If the file exists remove old file
+  if (await fileExists(todoPath)) await unlink(todoPath);
+
+  // Write update data
+  await writeFile(todoPath, JSON.stringify(data));
+};
+
+const serveTodo = async (ctx: Koa.Context) => {
+  ctx.body = await readTodo();
+};
+
+const addTodo = async (ctx: Koa.Context) => {
+  const postString: any = ctx.request.body;
+  console.log("postString ==> ", ctx.request.body);
+
+  if (postString.todo) {
+    ctx.body = `Received string: ${postString.todo}`;
+    ctx.status = 200;
+
+    const data = await readTodo();
+    data.push(postString.todo);
+    writeTodo(data);
+  } else ctx.status = 400;
+};
+
+app.use(cors());
+app.use(bodyParser());
 app.use(route.get("/image", serveImage));
+app.use(route.get("/todo", serveTodo));
+app.use(route.post("/todo", addTodo));
 
 console.log(`Started on port ${PORT}`);
 app.listen(PORT);

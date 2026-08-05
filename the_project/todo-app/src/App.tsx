@@ -1,4 +1,3 @@
-//import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import {
   Box,
   Button,
@@ -10,8 +9,27 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useState, SyntheticEvent } from "react";
+import axios from "axios";
 
 const App = () => {
+  const [newTodo, setNewTodo] = useState("");
+  const [todos, setTodos] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get<string[]>("http://localhost:3000/todo");
+      setTodos(data);
+    };
+    fetchData();
+  }, []);
+
+  const addTodo = (event: SyntheticEvent) => {
+    event.preventDefault();
+    axios.post("http://localhost:3000/todo", { todo: newTodo });
+    setTodos((todos) => [...todos, newTodo]);
+  };
+
   return (
     <div className="App">
       <Container>
@@ -29,21 +47,25 @@ const App = () => {
           src="http://127.0.0.1:3000/image"
         />
         <Divider sx={{ marginY: 2 }} />
-        <Stack direction="row">
-          <TextField
-            label="Enter a new todo (max 140 characters)"
-            sx={{ flexGrow: 1 }}
-            slotProps={{ htmlInput: { maxLength: 140 } }}
-          />
-          <Button>Send</Button>
-        </Stack>
+        <form onSubmit={addTodo}>
+          <Stack direction="row">
+            <TextField
+              label="Enter a new todo (max 140 characters)"
+              sx={{ flexGrow: 1 }}
+              slotProps={{ htmlInput: { maxLength: 140 } }}
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
+            />
+            <Button type="submit">Send</Button>
+          </Stack>
+        </form>
         <Typography variant="h4" sx={{ marginBottom: "0.5em" }}>
           Todos
         </Typography>
         <List>
-          <ListItem>Task 1</ListItem>
-          <ListItem>Task 2</ListItem>
-          <ListItem>Task 3</ListItem>
+          {todos.map((todo, index) => (
+            <ListItem key={index}>{todo}</ListItem>
+          ))}
         </List>
       </Container>
     </div>
