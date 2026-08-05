@@ -19,11 +19,10 @@ spec:
       containers:
         - name: todo-app
           image: prmckinney/k3d_todo_app:2.2
-          env:
-            - name: PORT
-              value: "4000"
+          imagePullPolicy: Always
         - name: todo-backend
           image: prmckinney/k3d_todo_backend:2.2
+          imagePullPolicy: Always
           env:
             - name: DIR
               value: "/usr/src/app/files"
