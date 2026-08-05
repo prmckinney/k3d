@@ -18,7 +18,7 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get<string[]>("http://localhost:3000/todo");
+      const { data } = await axios.get<string[]>("/todo");
       setTodos(data);
     };
     fetchData();
@@ -26,7 +26,7 @@ const App = () => {
 
   const addTodo = (event: SyntheticEvent) => {
     event.preventDefault();
-    axios.post("http://localhost:3000/todo", { todo: newTodo });
+    axios.post("/todo", { todo: newTodo });
     setTodos((todos) => [...todos, newTodo]);
   };
 
@@ -44,7 +44,7 @@ const App = () => {
             objectFit: "cover",
           }}
           alt="Description of image"
-          src="http://127.0.0.1:3000/image"
+          src="/image"
         />
         <Divider sx={{ marginY: 2 }} />
         <form onSubmit={addTodo}>

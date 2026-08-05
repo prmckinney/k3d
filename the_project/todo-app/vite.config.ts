@@ -10,6 +10,12 @@ export default defineConfig({
     strictPort: true,
   },
   server: {
+    proxy: {
+      "^/todo|image": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
     port: 8080,
     strictPort: true,
     host: true,
