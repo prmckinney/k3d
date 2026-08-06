@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: log-claim
-  namespace: exercies
+  namespace: exercises
 spec:
   storageClassName: my-example-pv
   accessModes:
