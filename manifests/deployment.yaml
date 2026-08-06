@@ -17,6 +17,12 @@ spec:
         - name: shared-log
           persistentVolumeClaim:
             claimName: log-claim
+        - name: config
+          configMap:
+            name: log-configmap
+            items:
+              - key: "information.txt"
+                path: "information.txt"
       containers:
         - name: log-output-write
           image: prmckinney/k3d_log_output_write:1.10
@@ -37,13 +43,6 @@ spec:
             - name: config
               mountPath: "/config"
               readOnly: true
-  volumes:
-    - name: config
-      configMap:
-        name: log-configmap
-        items:
-          - key: "information.txt"
-            path: "information.txt"
 ---
 apiVersion: apps/v1
 kind: Deployment
