@@ -19,12 +19,19 @@ spec:
             claimName: todo-claim
       containers:
         - name: todo-app
-          image: prmckinney/k3d_todo_app:2.2
+          image: prmckinney/k3d_todo_app:2.6
           imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "8080"
+            - name: BACKEND_URL
+              value: "http://localhost:3000"
         - name: todo-backend
           image: prmckinney/k3d_todo_backend:2.2
           imagePullPolicy: Always
           env:
+            - name: PORT
+              value: "3000"
             - name: DIR
               value: "/usr/src/app/files"
           volumeMounts:
