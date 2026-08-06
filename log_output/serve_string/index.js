@@ -25,10 +25,10 @@ app.use(async (ctx) => {
   const pingpong = response.data;
   const config = await getFile(configPath);
   const message = process.env.MESSAGE;
-  ctx.body = `file content: ${config}`;
-  ctx.body += `env variable: MESSAGE=${message}`;
-  ctx.body += `${uuid}`;
-  ctx.body += `Ping \/ Pongs: ${pingpong}`;
+  ctx.body = `file content: ${config}\n`;
+  ctx.body += `env variable: MESSAGE=${message}\n`;
+  ctx.body += `${uuid}\n`;
+  ctx.body += `Ping \/ Pongs: ${pingpong}\n`;
 
   console.log(`${uuid}\nPing \/ Pongs: ${pingpong}`);
 });
