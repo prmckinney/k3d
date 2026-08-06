@@ -23,11 +23,27 @@ spec:
           volumeMounts:
             - name: shared-log
               mountPath: /usr/src/app/files
-        - name: log-output-read
-          image: prmckinney/k3d_log_output_read:2.1
+        - name: log-output-server
+          image: prmckinney/k3d_log_output_server:2.5
+          env:
+            - name: message
+              valueFrom:
+                configMapKeyRef:
+                  name: log-configmap
+                  key: MESSAGE
           volumeMounts:
             - name: shared-log
               mountPath: /usr/src/app/files
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+  volumes:
+    - name: config
+      configMap:
+        name: log-configmap
+        items:
+          - key: "information.txt"
+            path: "information.txt"
 ---
 apiVersion: apps/v1
 kind: Deployment
