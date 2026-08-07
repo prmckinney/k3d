@@ -59,16 +59,9 @@ spec:
       labels:
         app: ping-pong
     spec:
-      volumes:
-        - name: shared-log
-          persistentVolumeClaim:
-            claimName: log-claim
       containers:
         - name: ping-pong
-          image: prmckinney/k3d_ping_pong:2.1
+          image: prmckinney/k3d_ping_pong:2.7
           env:
-            - name: DIR
-              value: "/usr/src/app/files"
-          volumeMounts:
-            - name: shared-log
-              mountPath: /usr/src/app/files
+            - name: POSTGRESS_HOST
+              value: "postgres-svc"

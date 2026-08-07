@@ -1,51 +1,40 @@
 import Koa from "koa";
 import route from "koa-route";
-import fs from "fs";
-import path from "path";
+import { Pool } from "pg";
 
 const app = new Koa();
 const PORT = process.env.PORT || 3000;
 
-const directory = process.env.DIR || ".";
-const filePath = path.join(directory, "pingpong.txt");
+const postgres = new Pool({
+  host: process.env.POSTGRES_HOST || "localhost",
+  port: process.env.POSTGRES_PORT || 5432,
+  user: process.env.POSTGRES_USER || "postgres",
+  password: process.env.POSTGRES_PASSWORD || "password",
+  database: process.env.POSTGRES_DB || "postgres",
+});
 
 let value = 0;
 
-const fileAlreadyExists = async () =>
-  new Promise((res) => {
-    fs.stat(filePath, (err, stats) => {
-      if (err || !stats) return res(false);
-      return res(true);
-    });
-  });
+const getPing = async () => {
+  const result = await postgres.query("SELECT ping FROM pingpong;");
+  return result.rows[0].ping;
+};
 
-const getFile = async () =>
-  new Promise((res) => {
-    fs.readFile(filePath, (err, buffer) => {
-      if (err)
-        return console.log("FAILED TO READ FILE", "----------------", err);
-      res(buffer);
-    });
-  });
+const writePing = async (ping) => {
+  const result = await postgres.query("UPDATE pingpong SET ping = ($1);", [
+    ping,
+  ]);
+};
 
 const pingpong = async (ctx) => {
-  // Delete file if it already exists
-  if (await fileAlreadyExists()) {
-    value = parseInt(await getFile()) + 1;
-    new Promise((res) => fs.unlink(filePath, (err) => res()));
-  }
-
-  await new Promise((res) => fs.mkdir(directory, (err) => res()));
-  await new Promise((res) =>
-    fs.appendFile(filePath, `${value}`, (err) => res()),
-  );
-
-  ctx.body = `pong ${value}`;
+  const result = (await getPing()) + 1;
+  await writePing(result);
+  ctx.body = `pong ${result}`;
 };
 
 const pings = async (ctx) => {
-  const pingpong = await getFile(filePath);
-  ctx.body = `${pingpong}`;
+  const result = await getPing();
+  ctx.body = `${result}`;
 };
 
 app.use(route.get("/", pingpong));
