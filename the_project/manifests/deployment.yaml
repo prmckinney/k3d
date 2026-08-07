@@ -34,26 +34,26 @@ spec:
               value: "3000"
             - name: DIR
               value: "/usr/src/app/files"
-            - name: POSTGRES_PASSHOST
+            - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:
                   name: todo-configmap
-                  key: postgres_passhost
-            - name: POSTGRES_PASSPORT
+                  key: postgres_host
+            - name: POSTGRES_PORT
               valueFrom:
                 configMapKeyRef:
                   name: todo-configmap
-                  key: postgres_passport
-            - name: POSTGRES_PASSDB
+                  key: postgres_port
+            - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
                   name: todo-configmap
-                  key: postgres_passdb
-            - name: POSTGRES_PASSUSER
+                  key: postgres_db
+            - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
                   name: todo-configmap
-                  key: postgres_passuser
+                  key: postgres_user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 configMapKeyRef:
