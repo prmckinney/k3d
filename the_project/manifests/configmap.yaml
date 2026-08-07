@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-configmap
+  namespace: exercises
+data:
+  postgres_host: "postgres-svc"
+  postgres_port: "5432"
+  postgres_db: "postgres"
+  postgres_user: "postgres"
+  postgres_password: "password"

@@ -3,6 +3,7 @@ import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
 import route from "koa-route";
 import { pipeline } from "node:stream/promises";
+import { Pool } from "pg";
 import path from "path";
 import fs from "fs";
 import { access, stat, mkdir, readFile, writeFile, unlink } from "fs/promises";
@@ -10,6 +11,14 @@ import axios from "axios";
 
 const app = new Koa();
 const PORT = process.env.PORT ?? "3000";
+
+const postgres = new Pool({
+  host: process.env.POSTGRES_HOST || "localhost",
+  port: process.env.POSTGRES_PORT || 5432,
+  user: process.env.POSTGRES_USER || "postgres",
+  password: process.env.POSTGRES_PASSWORD || "password",
+  database: process.env.POSTGRES_DB || "postgres",
+});
 
 const directory = process.env.DIR ?? path.join(".");
 const imagePath = path.join(directory, "image.jpg");
@@ -72,25 +81,12 @@ const serveImage = async (ctx: Koa.Context) => {
 };
 
 const readTodo = async () => {
-  try {
-    const content = await readFile(todoPath, "utf-8");
-    const data: string[] = JSON.parse(content);
-    return data;
-  } catch (error) {
-    return [];
-  }
+  const result = await postgres.query("SELECT todo FROM todos;");
+  console.log("result ==> ", result);
+  return result.rows.map((todo) => todo.todo);
 };
 
-const writeTodo = async (data: string[]) => {
-  // Create directory if it doesn't exist
-  if (!(await fileExists(directory))) await mkdir(directory);
-
-  // If the file exists remove old file
-  if (await fileExists(todoPath)) await unlink(todoPath);
-
-  // Write update data
-  await writeFile(todoPath, JSON.stringify(data));
-};
+//CREATE TABLE todos(todo TEXT);
 
 const serveTodo = async (ctx: Koa.Context) => {
   ctx.body = await readTodo();
@@ -106,7 +102,7 @@ const addTodo = async (ctx: Koa.Context) => {
 
     const data = await readTodo();
     data.push(postString.todo);
-    writeTodo(data);
+    await postgres.query("INSERT INTO todos VALUES ($1);", [postString.todo]);
   } else ctx.status = 400;
 };
 

@@ -18,6 +18,7 @@
     "koa": "^3.2.1",
     "koa-bodyparser": "^4.4.1",
     "koa-route": "^4.0.1",
+    "pg": "^8.22.0",
     "tsx": "^4.23.1"
   },
   "devDependencies": {
