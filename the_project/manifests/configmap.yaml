@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: todo-configmap
-  namespace: exercises
+  namespace: project
 data:
   postgres_host: "postgres-svc"
   postgres_port: "5432"
