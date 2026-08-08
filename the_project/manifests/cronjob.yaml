@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: todo-addurl
-namespace: project
+  namespace: project
 spec:
   schedule: "* * * * *"
   jobTemplate:
@@ -13,29 +13,29 @@ spec:
             - name: todo-addurl
               image: prmckinney/todo-cronjob:2.9
               imagePullPolicy: IfNotPresent
-          env:
-            - name: POSTGRES_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: todo-configmap
-                  key: postgres_host
-            - name: POSTGRES_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: todo-configmap
-                  key: postgres_port
-            - name: POSTGRES_DB
-              valueFrom:
-                configMapKeyRef:
-                  name: todo-configmap
-                  key: postgres_db
-            - name: POSTGRES_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: todo-configmap
-                  key: postgres_user
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: todo-configmap
-                  key: postgres_password
+              env:
+                - name: POSTGRES_HOST
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-configmap
+                      key: postgres_host
+                - name: POSTGRES_PORT
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-configmap
+                      key: postgres_port
+                - name: POSTGRES_DB
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-configmap
+                      key: postgres_db
+                - name: POSTGRES_USER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-configmap
+                      key: postgres_user
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    configMapKeyRef:
+                      name: todo-configmap
+                      key: postgres_password
