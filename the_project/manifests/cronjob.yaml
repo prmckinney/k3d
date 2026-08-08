@@ -13,6 +13,7 @@ spec:
             - name: todo-addurl
               image: prmckinney/todo-cronjob:2.9
               imagePullPolicy: IfNotPresent
+              restartPolicy: OnFailure
               env:
                 - name: POSTGRES_HOST
                   valueFrom:
