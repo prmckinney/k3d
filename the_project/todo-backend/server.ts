@@ -1,7 +1,7 @@
 import Koa from "koa";
 import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
-import route from "koa-route";
+import route, { post } from "koa-route";
 import { pipeline } from "node:stream/promises";
 import { Pool } from "pg";
 import path from "path";
@@ -82,7 +82,10 @@ const serveImage = async (ctx: Koa.Context) => {
 
 const readTodo = async () => {
   const result = await postgres.query("SELECT todo FROM todos;");
-  console.log("result ==> ", result);
+  console.log(
+    "Read todos ==> ",
+    result.rows.map((todo) => todo.todo),
+  );
   return result.rows.map((todo) => todo.todo);
 };
 
@@ -94,9 +97,15 @@ const serveTodo = async (ctx: Koa.Context) => {
 
 const addTodo = async (ctx: Koa.Context) => {
   const postString: any = ctx.request.body;
-  console.log("postString ==> ", ctx.request.body);
 
   if (postString.todo) {
+    console.log("Add todo ==> ", postString.todo);
+    if (postString.todo.length > 140) {
+      console.log("ERROR: todo is too long");
+      ctx.status = 400;
+      return;
+    }
+
     ctx.body = `Received string: ${postString.todo}`;
     ctx.status = 200;
 
