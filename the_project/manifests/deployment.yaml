@@ -27,7 +27,7 @@ spec:
             - name: BACKEND_URL
               value: "http://localhost:3000"
         - name: todo-backend
-          image: prmckinney/k3d_todo_backend:2.8
+          image: prmckinney/k3d_todo_backend:2.10
           imagePullPolicy: Always
           env:
             - name: PORT
