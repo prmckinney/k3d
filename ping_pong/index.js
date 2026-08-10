@@ -37,12 +37,7 @@ const pings = async (ctx) => {
   ctx.body = `${result}`;
 };
 
-const healthcheck = async (ctx) => {
-  ctx.status = 200;
-};
-
-app.use(route.get("/", healthcheck));
-app.use(route.get("/pingpong", pingpong));
+app.use(route.get("/", pingpong));
 app.use(route.get("/pings", pings));
 
 console.log(`Listening on port ${PORT}`);

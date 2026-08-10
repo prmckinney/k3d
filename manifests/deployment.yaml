@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: prmckinney/k3d_ping_pong:3.2
+          image: prmckinney/k3d_ping_pong:3.4
           env:
             - name: POSTGRES_HOST
               value: "postgres-svc"
