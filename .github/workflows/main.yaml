@@ -63,8 +63,6 @@ jobs:
       - name: "Form the image name"
         run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
-      - run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA"
-
       - name: Build
         run: docker build --tag $IMAGE_TAG ./the_project/todo-backend
 
@@ -77,6 +75,6 @@ jobs:
       - name: Deploy
         run: |-
           kustomize edit set image PROJECT/IMAGE=$IMAGE_TAG
-          kustomize build . | kubectl apply -f -
+          kustomize build ./the_project | kubectl apply -f -
           kubectl rollout status deployment $SERVICE
           kubectl get services -o wide
