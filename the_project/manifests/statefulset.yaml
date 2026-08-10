@@ -14,6 +14,13 @@ spec:
       labels:
         app: postgres
     spec:
+      volumes:
+        - name: config
+          configMap:
+            name: todo-configmap
+            items:
+              - key: "init.sql"
+                path: "init.sql"
       containers:
         - name: postgres
           image: postgres:18.4
@@ -29,12 +36,15 @@ spec:
           volumeMounts:
             - name: postgres-data-storage
               mountPath: /var/lib/postgresql
+            - name: config
+              mountPath: "/docker-entrypoint-initdb.d"
+              readOnly: true
+
   volumeClaimTemplates:
     - metadata:
         name: postgres-data-storage
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
         resources:
           requests:
             storage: 100Mi

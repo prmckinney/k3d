@@ -19,7 +19,7 @@ spec:
             claimName: todo-claim
       containers:
         - name: todo-app
-          image: prmckinney/k3d_todo_app:2.6
+          image: PROJECT/FRONTEND
           imagePullPolicy: Always
           env:
             - name: PORT
@@ -27,7 +27,7 @@ spec:
             - name: BACKEND_URL
               value: "http://localhost:3000"
         - name: todo-backend
-          image: prmckinney/k3d_todo_backend:2.10
+          image: PROJECT/BACKEND
           imagePullPolicy: Always
           env:
             - name: PORT

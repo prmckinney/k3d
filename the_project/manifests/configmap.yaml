@@ -9,3 +9,5 @@ data:
   postgres_db: "postgres"
   postgres_user: "postgres"
   postgres_password: "password"
+  init.sql: |
+    CREATE TABLE todos(todo TEXT);
