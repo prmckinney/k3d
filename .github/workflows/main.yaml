@@ -3,6 +3,18 @@ name: Release application
 on:
   push:
 
+  # Enables the manual "Run workflow" button
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
 permissions:
   contents: read
   id-token: write
