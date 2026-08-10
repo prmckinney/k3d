@@ -27,7 +27,7 @@ spec:
             - name: BACKEND_URL
               value: "http://localhost:3000"
         - name: todo-backend
-          image: PROJECT/BACKEND
+          image: PROJECT/IMAGE
           imagePullPolicy: Always
           env:
             - name: PORT

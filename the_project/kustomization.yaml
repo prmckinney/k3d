@@ -13,6 +13,6 @@ images:
   - name: PROJECT/FRONTEND
     newName: prmckinney/k3d_todo_app
     newTag: "2.6"
-  - name: PROJECT/BACKEND
+  - name: PROJECT/IMAGE
     newName: prmckinney/k3d_todo_backend
     newTag: "2.10"
