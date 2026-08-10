@@ -4,7 +4,7 @@ metadata:
   name: log-output-svc
   namespace: exercises
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: log-output
   ports:
@@ -19,7 +19,7 @@ metadata:
   name: ping-pong-svc
   namespace: exercises
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: ping-pong
   ports:
