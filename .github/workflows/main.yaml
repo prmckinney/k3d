@@ -74,7 +74,8 @@ jobs:
 
       - name: Deploy
         run: |-
+          cd ./the_project
           kustomize edit set image PROJECT/IMAGE=$IMAGE_TAG
-          kustomize build ./the_project | kubectl apply -f -
+          kustomize build . | kubectl apply -f -
           kubectl rollout status deployment $SERVICE
           kubectl get services -o wide
