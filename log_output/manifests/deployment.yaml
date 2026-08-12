@@ -25,12 +25,12 @@ spec:
                 path: "information.txt"
       containers:
         - name: log-output-write
-          image: prmckinney/k3d_log_output_write:1.10
+          image: EXERCISE/BACKEND
           volumeMounts:
             - name: shared-log
               mountPath: /usr/src/app/files
         - name: log-output-server
-          image: prmckinney/k3d_log_output_server:2.5
+          image: EXERCISE/FRONTEND
           env:
             - name: MESSAGE
               valueFrom:
@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: prmckinney/k3d_ping_pong:3.4
+          image: EXERCISE/PINGPONG
           env:
             - name: POSTGRES_HOST
               value: "postgres-svc"

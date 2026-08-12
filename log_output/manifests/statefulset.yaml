@@ -14,18 +14,31 @@ spec:
       labels:
         app: postgres
     spec:
+      volumes:
+        - name: config
+          configMap:
+            name: log-configmap
+            items:
+              - key: "init.sql"
+                path: "init.sql"
       containers:
         - name: postgres
           image: postgres:18.4
           env:
             - name: POSTGRES_PASSWORD
-              value: "password"
+              valueFrom:
+                configMapKeyRef:
+                  name: log-configmap
+                  key: postgres_password
           ports:
             - name: web
               containerPort: 6379
           volumeMounts:
             - name: postgres-data-storage
-              mountPath: /data
+              mountPath: /var/lib/postgresql
+            - name: config
+              mountPath: "/docker-entrypoint-initdb.d"
+              readOnly: true
   volumeClaimTemplates:
     - metadata:
         name: postgres-data-storage
