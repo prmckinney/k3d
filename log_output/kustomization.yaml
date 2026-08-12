@@ -12,7 +12,7 @@ resources:
 images:
   - name: EXERCISE/FRONTEND
     newName: prmckinney/k3d_log_output_server
-    newTag: "2.5"
+    newTag: "4.1"
   - name: EXERCISE/BACKEND
     newName: prmckinney/k3d_log_output_write
     newTag: "1.10"

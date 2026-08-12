@@ -1,4 +1,5 @@
 import Koa from "koa";
+import route from "koa-route";
 import fs from "fs";
 import path from "path";
 import axios from "axios";
@@ -19,7 +20,21 @@ const getFile = async (filePath) =>
     });
   });
 
-app.use(async (ctx) => {
+const livez = async (ctx) => {
+  ctx.status = 200;
+};
+
+const readyz = async (ctx) => {
+  try {
+    await axios.get("http://ping-pong-svc:1235/pings");
+    ctx.status = 200;
+  } catch (err) {
+    console.log("Failed to connect to ping pong");
+    ctx.status = 503;
+  }
+};
+
+const log = async (ctx) => {
   const uuid = await getFile(uuidFilePath);
   const response = await axios.get("http://ping-pong-svc:1235/pings");
   const pingpong = response.data;
@@ -31,7 +46,11 @@ app.use(async (ctx) => {
   ctx.body += `Ping \/ Pongs: ${pingpong}\n`;
 
   console.log(`${uuid}\nPing \/ Pongs: ${pingpong}`);
-});
+};
+
+app.use(route.get("/", log));
+app.use(route.get("/livez", livez));
+app.use(route.get("/readyz", readyz));
 
 console.log(`Started on port ${PORT}`);
 app.listen(PORT);
