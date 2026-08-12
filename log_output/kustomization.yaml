@@ -18,4 +18,4 @@ images:
     newTag: "1.10"
   - name: EXERCISE/PINGPONG
     newName: prmckinney/k3d_ping_pong
-    newTag: "3.4"
+    newTag: "4.1"

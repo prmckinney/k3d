@@ -26,11 +26,13 @@ spec:
       containers:
         - name: log-output-write
           image: EXERCISE/BACKEND
+          imagePullPolicy: Always
           volumeMounts:
             - name: shared-log
               mountPath: /usr/src/app/files
         - name: log-output-server
           image: EXERCISE/FRONTEND
+          imagePullPolicy: Always
           env:
             - name: MESSAGE
               valueFrom:
@@ -62,6 +64,13 @@ spec:
       containers:
         - name: ping-pong
           image: EXERCISE/PINGPONG
+          imagePullPolicy: Always
           env:
             - name: POSTGRES_HOST
               value: "postgres-svc"
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /readyz
+              port: 3000

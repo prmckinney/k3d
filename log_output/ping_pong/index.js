@@ -37,8 +37,24 @@ const pings = async (ctx) => {
   ctx.body = `${result}`;
 };
 
+const livez = async (ctx) => {
+  ctx.status = 200;
+};
+
+const readyz = async (ctx) => {
+  try {
+    await postgres.query("SELECT NOW()");
+    ctx.status = 200;
+  } catch (err) {
+    console.log("Failed to connect to POSTGRES: ", process.env.POSTGRES_HOST);
+    ctx.status = 503;
+  }
+};
+
 app.use(route.get("/", pingpong));
 app.use(route.get("/pings", pings));
+app.use(route.get("/livez", livez));
+app.use(route.get("/readyz", readyz));
 
 console.log(`Listening on port ${PORT}`);
 app.listen(PORT);
