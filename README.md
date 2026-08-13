@@ -8,3 +8,7 @@
 - [1.2.](https://github.com/prmckinney/k3d/tree/1.2/the_project)
 - [1.3.](https://github.com/prmckinney/k3d/tree/1.3/log_output)
 - [1.4.](https://github.com/prmckinney/k3d/tree/1.3/the_project)
+
+### Chapter 4
+
+- [4.3] sum(kube_pod_info{created_by_kind="StatefulSet",namespace="monitoring"})
