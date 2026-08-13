@@ -36,7 +36,7 @@ jobs:
           filters: |
             should_run:
               - '${{ matrix.context }}/**'
-              - '.github/workflows/todo.yml'
+              - '.github/workflows/todo.yaml'
 
       - name: Login to Docker Hub
         if: ${{ steps.filter.outputs.should_run == 'true' }}
