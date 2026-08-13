@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        "^/todo|image": {
+        "^/todo|image|break|readyz": {
           target: env.BACKEND_URL || "http://localhost:3000",
           changeOrigin: true,
         },

@@ -1,13 +1,15 @@
 import Koa from "koa";
 import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
-import route, { post } from "koa-route";
+import route from "koa-route";
 import { pipeline } from "node:stream/promises";
 import { Pool } from "pg";
 import path from "path";
 import fs from "fs";
-import { access, stat, mkdir, readFile, writeFile, unlink } from "fs/promises";
+import { access, stat, mkdir, unlink } from "fs/promises";
 import axios from "axios";
+
+let broken = false;
 
 const app = new Koa();
 const PORT = process.env.PORT ?? "3000";
@@ -22,7 +24,6 @@ const postgres = new Pool({
 
 const directory = process.env.DIR ?? path.join(".");
 const imagePath = path.join(directory, "image.jpg");
-const todoPath = path.join(directory, "todo.json");
 
 const fileExists = async (path: string) => {
   try {
@@ -115,11 +116,38 @@ const addTodo = async (ctx: Koa.Context) => {
   } else ctx.status = 400;
 };
 
+const breakBE = (ctx: Koa.Context) => {
+  broken = true;
+  ctx.status = 200;
+};
+
+const livez = (ctx: Koa.Context) => {
+  if (!broken) ctx.status = 200;
+  else ctx.status = 500;
+};
+
+const readyz = async (ctx: Koa.Context) => {
+  if (!broken) {
+    try {
+      await postgres.query("SELECT NOW()");
+      ctx.status = 200;
+    } catch (err) {
+      console.log("Failed to connect to POSTGRES: ", process.env.POSTGRES_HOST);
+      ctx.status = 503;
+    }
+  } else {
+    ctx.status = 500;
+  }
+};
+
 app.use(cors());
 app.use(bodyParser());
 app.use(route.get("/image", serveImage));
 app.use(route.get("/todo", serveTodo));
 app.use(route.post("/todo", addTodo));
+app.use(route.post("/break", breakBE));
+app.use(route.get("/livez", livez));
+app.use(route.get("/readyz", readyz));
 
 console.log(`Started on port ${PORT}`);
 app.listen(PORT);
