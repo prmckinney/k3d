@@ -86,7 +86,7 @@ jobs:
         uses: imranismail/setup-kustomize@v3
 
       - name: Run Kustomize
-        working_directory: ./the_project
+        working-directory: ./the_project
         run: |
           for file in kustom-*.sh; do source $file; done
 
