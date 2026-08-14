@@ -62,7 +62,7 @@ jobs:
         if: ${{ steps.filter.outputs.should_run == 'true' }}
         uses: actions/upload-artifact@v4
         with:
-          name: kustom-${{ matrix.service_name }}
+          name: kustom-${{ matrix.service_name }}.sh
           path: kustom-${{ matrix.service_name }}.sh
 
   commit:
@@ -87,10 +87,6 @@ jobs:
       - name: Run Kustomize
         working-directory: ./the_project
         run: |
-          pwd
-          ls -l
-          ls -l ..
-          ls -l ./the_project
           for file in kustom-*.sh; do source $file; done
 
       - name: commit kustomization.yaml to GitHub
