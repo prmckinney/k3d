@@ -56,12 +56,11 @@ jobs:
       - name: Set up Kustomize
         if: ${{ steps.filter.outputs.should_run == 'true' }}
         uses: imranismail/setup-kustomize@v3
-        working-directory: ./the_project
 
       - name: Use right image
         if: ${{ steps.filter.outputs.should_run == 'true' }}
-        run: kustomize edit set image ${{ matrix.kustom_name }}=${{ matrix.image_name }}:$GITHUB_SHA
         working-directory: ./the_project
+        run: kustomize edit set image ${{ matrix.kustom_name }}=${{ matrix.image_name }}:$GITHUB_SHA
 
       - name: commit kustomization.yaml to GitHub
         if: ${{ steps.filter.outputs.should_run == 'true' }}
