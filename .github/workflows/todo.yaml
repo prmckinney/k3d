@@ -84,10 +84,7 @@ jobs:
       - name: Run Kustomize
         working-directory: ./the_project
         run: |
-          ls -lrt ../kustom-*.sh
-          pwd
-          ls -lrt ..
-          for file in ../kustom-*.sh; do source $file; done
+          for file in ../kustom-*.sh/*; do source $file; done
 
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v10
