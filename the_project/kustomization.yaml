@@ -12,7 +12,7 @@ resources:
 images:
 - name: PROJECT/BACKEND
   newName: prmckinney/k3d_todo_backend
-  newTag: 315e4cce64509b7474d765c64910a963cb7e74b1
+  newTag: 2dcfa5be11ed562f23d5b3167a7e3f241672d35f
 - name: PROJECT/FRONTEND
   newName: prmckinney/k3d_todo_app
-  newTag: 6053f4905855faaa9d34f48f47f7fd8507052506
+  newTag: 2dcfa5be11ed562f23d5b3167a7e3f241672d35f
