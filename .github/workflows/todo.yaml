@@ -13,7 +13,6 @@ jobs:
 
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         include:
           - service_name: todo_app
@@ -67,7 +66,7 @@ jobs:
           path: kustom-${{ matrix.service_name }}.sh
 
   commit:
-    name: Build, Push, Release
+    name: Modify and Commit Kustomize
     runs-on: ubuntu-latest
     needs: build
     environment: ArgoCD
@@ -88,6 +87,10 @@ jobs:
       - name: Run Kustomize
         working-directory: ./the_project
         run: |
+          pwd
+          ls -l
+          ls -l ..
+          ls -l ./the_project
           for file in kustom-*.sh; do source $file; done
 
       - name: commit kustomization.yaml to GitHub
