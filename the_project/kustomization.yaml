@@ -15,4 +15,4 @@ images:
   newTag: 315e4cce64509b7474d765c64910a963cb7e74b1
 - name: PROJECT/FRONTEND
   newName: prmckinney/k3d_todo_app
-  newTag: "4.2"
+  newTag: 6053f4905855faaa9d34f48f47f7fd8507052506
