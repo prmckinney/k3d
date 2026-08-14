@@ -6,11 +6,19 @@ on:
       - "the_project/**"
       - ".github/workflows/todo.yaml"
 jobs:
-  build-publish:
-    name: Build, Push, Release
+  checkout:
+    name: Checkout repo
     runs-on: ubuntu-latest
     environment: ArgoCD
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
 
+  build:
+    name: Build, Push
+    runs-on: ubuntu-latest
+    needs: checkout
+    environment: ArgoCD
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -25,11 +33,7 @@ jobs:
             context: ./the_project/todo-backend
             image_name: prmckinney/k3d_todo_backend
             kustom_name: PROJECT/BACKEND
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
       # Only execute steps if the specific service directory or the workflow file changed
       - name: Check for changes
         id: filter
@@ -63,6 +67,12 @@ jobs:
         working-directory: ./the_project
         run: kustomize edit set image ${{ matrix.kustom_name }}=${{ matrix.image_name }}:$GITHUB_SHA
 
+  commit:
+    name: Commit kustomize
+    runs-on: ubuntu-latest
+    needs: build
+    environment: ArgoCD
+    steps:
       - name: commit kustomization.yaml to GitHub
         if: ${{ steps.filter.outputs.should_run == 'true' }}
         uses: EndBug/add-and-commit@v10
